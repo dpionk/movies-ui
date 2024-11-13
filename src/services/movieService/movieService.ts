@@ -15,6 +15,9 @@ export default {
   async addMovie(movie: Movie): Promise<Array<Movie>> {
     return await apiClient.post('/', movie)
   },
+  async updateMovie(movie: Movie): Promise<Array<Movie>> {
+    return await apiClient.put(`/${movie.id}`, movie)
+  },
   async deleteMovie(id: number): Promise<Array<Movie>> {
     return await apiClient.delete(`/${id}`)
   },

@@ -17,8 +17,8 @@
         <td>{{ movie.rate }}</td>
         <td>
           <div>
-            <button type="button" class="btn btn-light">Edit</button>
-            <button type="button" class="btn btn-danger" @click="toggleConfirmModal(movie.id)">
+            <button type="button" class="btn btn-light" @click="toggleEditMovieModal(movie)">Edit</button>
+            <button type="button" class="btn btn-danger" @click="toggleConfirmModal(movie)">
               Delete
             </button>
           </div>
@@ -30,13 +30,21 @@
   <ConfirmModal
     v-show="showConfirmModal"
     @onCancel="toggleConfirmModal"
-    @onConfirm="handleConfirm"
+    @onConfirm="handleConfirmDelete"
+  />
+  <EditMovieModal
+      v-if="showEditMovieModal"
+      :movie="selectedMovie"
+      @onCancel="toggleShowEditMovieModal"
+      @onConfirm="toggleShowEditMovieModal"
+      @setMovies="setMovies"
   />
 </template>
 
 <script>
-import ConfirmModal from '@/components/modals/ConfirmModal/ConfirmModal.vue'
-import movieService from '@/services/movieService'
+import ConfirmModal from '@/components/modals/ConfirmModal/ConfirmModal.vue';
+import EditMovieModal from '@/components/modals/EditMovieModal/EditMovieModal.vue';
+import movieService from '@/services/movieService';
 
 export default {
   props: {
@@ -47,22 +55,34 @@ export default {
   },
   components: {
     ConfirmModal,
+    EditMovieModal,
   },
   data() {
     return {
       showConfirmModal: false,
-      selectedMovieId: null,
-    }
+      showEditMovieModal: false,
+      selectedMovie: null,
+    };
   },
   methods: {
-    toggleConfirmModal(movieId = null) {
-      this.selectedMovieId = movieId
-      this.showConfirmModal = !this.showConfirmModal
+    toggleConfirmModal(movie) {
+      this.selectedMovie = movie;
+      this.showConfirmModal = !this.showConfirmModal;
     },
-    async handleConfirm() {
-      await movieService.deleteMovie(this.selectedMovieId)
-      this.toggleConfirmModal()
+    toggleEditMovieModal(movie) {
+      this.selectedMovie = movie;
+      this.showEditMovieModal = !this.showEditMovieModal;
+    },
+    async handleConfirmDelete() {
+      const response = await movieService.deleteMovie(this.selectedMovie.id);
+      this.$emit('setMovies', response.data);
+      this.toggleConfirmModal();
+    },
+    async handleConfirmUpdate() {
+      const response = await movieService.updateMovie(this.selectedMovie);
+      this.$emit('setMovies', response.data);
+      this.toggleEditMovieModal();
     },
   },
-}
+};
 </script>

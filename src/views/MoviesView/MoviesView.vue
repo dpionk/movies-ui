@@ -4,19 +4,20 @@
       <h1>Movies</h1>
       <button type="button" class="btn btn-dark" @click="toggleShowAddMovieModal">+</button>
     </div>
-    <MoviesTable :movies="movies" />
+    <MoviesTable :movies="movies" @setMovies="setMovies" />
     <AddMovieModal
       v-if="showAddMovieModal"
       @onCancel="toggleShowAddMovieModal"
       @onConfirm="toggleShowAddMovieModal"
+      @setMovies="setMovies"
     />
   </div>
 </template>
 
 <script>
-import AddMovieModal from '@/components/modals/AddMovieModal/AddMovieModal.vue'
-import MoviesTable from '@/components/MoviesTable/MoviesTable.vue'
-import movieService from '@/services/movieService'
+import AddMovieModal from '@/components/modals/AddMovieModal/AddMovieModal.vue';
+import MoviesTable from '@/components/MoviesTable/MoviesTable.vue';
+import movieService from '@/services/movieService';
 
 export default {
   components: {
@@ -27,23 +28,27 @@ export default {
     return {
       movies: [],
       showAddMovieModal: false,
-    }
+    };
   },
   methods: {
     async getMovies() {
       try {
-        const response = await movieService.getMovies()
-        this.movies = response.data
+        const response = await movieService.getMovies();
+        this.movies = response.data;
       } catch (error) {
-        console.error('Error fetching movies:', error)
+        console.error('Error fetching movies:', error);
       }
     },
+    setMovies(movies) {
+      console.log('setMovies');
+      this.movies = movies;
+    },
     toggleShowAddMovieModal() {
-      this.showAddMovieModal = !this.showAddMovieModal
+      this.showAddMovieModal = !this.showAddMovieModal;
     },
   },
   mounted() {
-    this.getMovies()
+    this.getMovies();
   },
-}
+};
 </script>

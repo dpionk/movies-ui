@@ -47,24 +47,25 @@
 </template>
 
 <script>
-import { useVuelidate } from '@vuelidate/core'
-import { required, maxLength, between, helpers } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core';
+import { required, maxLength, between, helpers } from '@vuelidate/validators';
 
 export default {
   props: {
     title: String,
+    selectedMovie: Object,
     onSubmit: Function,
   },
   data() {
     return {
       v$: useVuelidate(),
-      movie: {
+      movie: this.selectedMovie ? JSON.parse(JSON.stringify(this.selectedMovie)) : {
         title: null,
         director: null,
         year: null,
         rate: 0,
       },
-    }
+    };
   },
   validations() {
     return {
@@ -76,18 +77,18 @@ export default {
         },
         year: { between: between(1900, 2200), $autoDirty: true },
       },
-    }
+    };
   },
   methods: {
     async submitForm() {
-      await this.$v.$validate()
-
-      if (!this.$v.$invalid) {
-        this.$emit('onSubmit', this.movie)
-      }
+      //   await this.$v.$validate()
+      //   if (!this.$v.$invalid) {
+      console.log(this);
+      this.$emit('onSubmit', (this.movie));
+      //   }
     },
   },
-}
+};
 </script>
 
 <style scoped></style>
