@@ -1,32 +1,21 @@
 <template>
   <div>
-    <h1>Movies</h1>
-    <table v-if="movies.length" class="table table-bordered table-striped">
-      <thead class="thead-dark">
-        <tr>
-          <th>Title</th>
-          <th>Director</th>
-          <th>Release Date</th>
-          <th>Rate</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="movie in movies" :key="movie.id">
-          <td>{{ movie.title }}</td>
-          <td>{{ movie.director }}</td>
-          <td>{{ movie.year }}</td>
-          <td>{{ movie.rate }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <p v-else>No movies available</p>
+    <div>
+      <h1>Movies</h1>
+      <button type="button" class="btn btn-dark">+</button>
+    </div>
+    <MoviesTable :movies="movies"/>
   </div>
 </template>
   
   <script>
-  import movieService from "@/services/movieService";
+import MoviesTable from "@/components/MoviesTable/MoviesTable.vue";
+import movieService from "@/services/movieService";
   
   export default {
+    components: {
+    MoviesTable
+    },
     data() {
       return {
         movies: []
