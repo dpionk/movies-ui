@@ -1,1 +1,1 @@
-export { default } from './movieService';
+export { default } from './movieService'

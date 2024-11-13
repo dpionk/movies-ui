@@ -1,7 +1,7 @@
 export type Movie = {
-    id: string;
-    title?: string;
-    director?: string;
-    year: number;
-    rate: number;
-};
+  id: string
+  title?: string
+  director?: string
+  year: number
+  rate: number
+}

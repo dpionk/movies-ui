@@ -2,30 +2,28 @@
   <div class="modal fade show" tabindex="-1" role="dialog" :style="{ display: 'block' }">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Confirm</h5>
-        </div>
-        <div class="modal-body">
-          <p>Are you sure?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" @click="cancel">Cancel</button>
-          <button type="button" class="btn btn-primary" @click="confirm">Confirm</button>
-        </div>
+        <Form :title="title" @onSubmit="addMovie"></Form>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Form from '@/components/Form/Form.vue'
+import movieService from '@/services/movieService'
+
 export default {
   name: 'ConfirmModal',
   props: {
     onCancel: Function,
     onConfirm: Function,
   },
+  components: {
+    Form,
+  },
   data() {
     return {
+      title: 'Add movie',
       showConfirmModal: false,
     }
   },
@@ -33,7 +31,8 @@ export default {
     cancel() {
       this.$emit('onCancel')
     },
-    confirm() {
+    async addMovie(movie) {
+      await movieService.addMovie(movie)
       this.$emit('onConfirm')
     },
   },
